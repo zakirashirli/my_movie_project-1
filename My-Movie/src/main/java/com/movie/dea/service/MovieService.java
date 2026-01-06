@@ -78,4 +78,16 @@ public class MovieService {
         }
         return "Not found";
     }
-}
+
+    public List<Movie> search(@PathVariable String title, @PathVariable String genre) {
+        if (title != null && !title.isBlank()) {
+            return movieRepository.findByTitleContainingIgnoreCase(title);
+        }
+
+        if (genre != null && !genre.isBlank()) {
+            return movieRepository.findByGenre(genre);
+        }
+
+        return movieRepository.findAll();
+    }
+    }
