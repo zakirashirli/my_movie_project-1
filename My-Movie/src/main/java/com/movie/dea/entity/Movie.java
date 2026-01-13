@@ -1,6 +1,8 @@
 package com.movie.dea.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Pageable;
 
@@ -12,12 +14,14 @@ public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @NotBlank(message = "Title is required!")
     private String title;
+    @NotBlank(message = "Genre is required!")
     private String genre;
     private LocalDate releaseDate;
     private Double rating;
     private String duration;
-    private Pageable pageable;
+//    private Pageable pageable;
 
 
     public Movie() {
@@ -25,14 +29,14 @@ public class Movie {
     }
 
 
-    public Movie(Integer id, String title, String genre, String duration, Double rating, LocalDate releaseDate, Pageable pageable) {
+    public Movie(Integer id, String title, String genre, String duration, Double rating, LocalDate releaseDate) {
         this.id = id;
         this.title = title;
         this.genre = genre;
         this.duration = duration;
         this.rating = rating;
         this.releaseDate = releaseDate;
-        this.pageable = pageable;
+//        this.pageable = pageable;
     }
 
     public LocalDate getReleaseDate() {
@@ -59,13 +63,13 @@ public class Movie {
         this.rating = rating;
     }
 
-    public Pageable getPageable() {
-        return pageable;
-    }
-
-    public void setPageable(Pageable pageable) {
-        this.pageable = pageable;
-    }
+//    public Pageable getPageable() {
+//        return pageable;
+//    }
+//
+//    public void setPageable(Pageable pageable) {
+//        this.pageable = pageable;
+//    }
 
     public Integer getId(){return id;}
 

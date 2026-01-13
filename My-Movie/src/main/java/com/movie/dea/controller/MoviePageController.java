@@ -1,10 +1,13 @@
 package com.movie.dea.controller;
 
 
+import com.movie.dea.entity.Movie;
 import com.movie.dea.service.MovieService;
+import jakarta.validation.Valid;
 import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -28,9 +31,27 @@ public class MoviePageController {
             return "movies/list";
         }
 
-        public String edit (@PathVariable Integer id, Model model){
-            model.addAttribute("movie", movieService.getMovie(id));
-            return "movies/edit";
+        @GetMapping("/new")
+        public String form(Model model){
+        model.addAttribute("movie", new Movie());
+        return "movies/new";
+        }
+
+        @PostMapping
+        public String save(@Valid @ModelAttribute Movie movie, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "movies/form";
+        }
+
+
+        movieService.createMovie(movie);
+        return "redirect:/movies";
+        }
+
+        @GetMapping("/{id}/edit")
+        public String edit(@PathVariable Integer id,Model model){
+        model.addAttribute("movie", movieService.getMovie(id));
+        return "movies/edit";
         }
 
         @PostMapping("/{id}/delete")
