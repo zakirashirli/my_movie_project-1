@@ -1,7 +1,7 @@
 package com.movie.dea.dto;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -16,13 +16,24 @@ public class MovieForm {
     private Integer id;
 
     @NotBlank(message = "Title is required!")
+    @Size(min = 5, max = 100, message = "Title must be 5-100 chars.")
     private String title;
     @NotBlank(message = "Genre is required!")
+    @Size(min = 5, max = 100, message = "Genre must be 5-100 chars.")
     private String genre;
 
 
+   @NotNull(message = "don't leave empty")
     private LocalDate releaseDate;
+
+    @NotNull(message = "don't leave empty")
+    @DecimalMin(value = "1.0", message = "Rating must be at least 0")
+    @DecimalMax(value = "10.0", message = "Rating must be at most 10")
+
     private Double rating;
+
+    @NotBlank(message = "Duration is required!")
+    @Size(min = 2, max = 3, message = "Genre must be 5-100 chars")
     private String duration;
 
     public Integer getId() {

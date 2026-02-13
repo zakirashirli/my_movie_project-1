@@ -24,4 +24,10 @@ public interface MovieRepository extends JpaRepository<Movie, Integer> {
     List<Movie> findByReleaseDate(LocalDate releaseDate);
 
     Page<Movie> findAll(Pageable pageable);
+
+    Page<Movie> findByTitleAndGenreContainingIgnoreCase(
+            String title,
+            String genre,
+            Pageable pageable
+    );
 }

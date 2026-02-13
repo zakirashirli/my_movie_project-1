@@ -6,6 +6,7 @@ import com.movie.dea.entity.Movie;
 import com.movie.dea.service.MovieService;
 import jakarta.validation.Valid;
 import org.jspecify.annotations.Nullable;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,18 +29,48 @@ public class MoviePageController {
     public String list(
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String genre,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
             @RequestParam(defaultValue = "title") String sortBy,
             @RequestParam(defaultValue = "asc") String direction,
             Model model
     ) {
 
-        Sort sort = direction.equals("asc")
+        if (page < 0) {
+            page=0;
+        }
+
+        Sort sort = direction.equalsIgnoreCase("asc")
                 ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
 
-        List<Movie> movies = movieService.getAllMovie();
+        Page<Movie> movies = movieService.searchPaginated(
+                title,
+                genre,
+                page,
+                size,
+                sort
+        );
 
-        model.addAttribute("movies", movieService.search(title, genre));
+        if (page >= movies.getTotalPages() && movies.getTotalPages() > 0) {
+            page = movies.getTotalPages() - 1;
+            movies = movieService.searchPaginated(
+                    title,
+                    genre,
+                    page,
+                    size,
+                    sort
+            );
+        }
+
+//        List<Movie> movies = movieService.getAllMovie();
+
+        model.addAttribute("movies", movies.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", movies.getTotalPages());
+        model.addAttribute("size", size);
+
+
         model.addAttribute("title", title);
         model.addAttribute("genre", genre);
         model.addAttribute("sortBy", sortBy);

@@ -181,10 +181,16 @@
 
 <a href="/movies/new">Add Movie</a>
 
-<form method="get" action="/movies">
+<form method="get" th:action="@{/movies">
     <a th:href="@{/movies(
     sortBy='title',
     direction=${sortBy == 'title' and direction == 'asc' ? 'desc' : 'asc'}
+    title=${title},
+    genre=${genre},
+    page=${currentPage},
+    size=${size},
+
+
     )}"> sort
         <span th:if="${sortBy == 'title'}"
               th:text="${direction == 'asc' ? '1' : '2'}"   ></span>
