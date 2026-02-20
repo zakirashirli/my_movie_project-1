@@ -23,7 +23,7 @@ public class MovieForm {
     private String genre;
 
 
-   @NotNull(message = "don't leave empty")
+    @NotNull(message = "don't leave empty")
     private LocalDate releaseDate;
 
     @NotNull(message = "don't leave empty")
@@ -36,7 +36,6 @@ public class MovieForm {
     @Size(min = 2, max = 3, message = "Genre must be 5-100 chars")
     private String duration;
 
-    private LocalDate directorName;
 
     public Integer getId() {
         return id;
@@ -84,13 +83,5 @@ public class MovieForm {
 
     public void setDuration(String duration) {
         this.duration = duration;
-    }
-
-    public LocalDate getDirectorName() {
-        return directorName;
-    }
-
-    public void setDirectorName(LocalDate directorName) {
-        this.directorName = directorName;
     }
 }

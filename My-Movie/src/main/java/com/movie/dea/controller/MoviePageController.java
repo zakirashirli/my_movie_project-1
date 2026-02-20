@@ -39,6 +39,11 @@ public class MoviePageController {
         if (page < 0) {
             page=0;
         }
+//
+//        title = (title == null) ? "" : title;
+//        genre = (genre == null) ? "" : genre;
+//        sortBy = (sortBy == null) ? "" : sortBy;
+//        direction = (direction == null) ? "" : direction;
 
         Sort sort = direction.equalsIgnoreCase("asc")
                 ? Sort.by(sortBy).ascending()
@@ -51,6 +56,10 @@ public class MoviePageController {
                 size,
                 sort
         );
+
+        if (page >= movies.getTotalPages() && movies.getTotalPages() > 0) {
+            page = movies.getTotalPages() - 1;
+        }
 
         if (page >= movies.getTotalPages() && movies.getTotalPages() > 0) {
             page = movies.getTotalPages() - 1;

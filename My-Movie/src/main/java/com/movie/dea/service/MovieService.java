@@ -1,8 +1,12 @@
 package com.movie.dea.service;
 
 
+import com.movie.dea.dto.MovieForm;
+import com.movie.dea.entity.Director;
 import com.movie.dea.entity.Movie;
 import com.movie.dea.exception.MovieNotFoundException;
+import com.movie.dea.mapper.MovieMapper;
+import com.movie.dea.repository.DirectorRepository;
 import com.movie.dea.repository.MovieRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,9 +25,13 @@ import java.util.Locale;
 @Service
 public class MovieService {
     private final MovieRepository movieRepository;
+    private final DirectorRepository directorRepository;
+    private final MovieMapper movieMapper;
 
-    public MovieService(MovieRepository movieRepository) {
+    public MovieService(MovieRepository movieRepository, DirectorRepository directorRepository, MovieMapper movieMapper) {
         this.movieRepository = movieRepository;
+        this.directorRepository = directorRepository;
+        this.movieMapper = movieMapper;
     }
 
     public List<Movie> getAllMovie() {
@@ -42,7 +50,7 @@ public class MovieService {
         return movieRepository.findByMinRating(minRating);
     }
 
-        public List<Movie> getAllMovieByReleaseDate(LocalDate releaseDate) {
+    public List<Movie> getAllMovieByReleaseDate(LocalDate releaseDate) {
         return movieRepository.findByReleaseDate(releaseDate);
     }
 
@@ -55,9 +63,44 @@ public class MovieService {
                 .orElseThrow(() -> new MovieNotFoundException("No such a movie in db:  " + id));
     }
 
-    public Page<Movie> getMoviesByPage(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return movieRepository.findAll(pageable);
+    public Director getDirector(Integer id) {
+        return directorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("No director with id:" + id));
+    }
+
+    public void saveForm(MovieForm movieForm) {
+        Movie movie;
+
+
+        if (movieForm.getId() == null) {
+            movie = new Movie();
+        } else {
+            movie = getMovie(movieForm.getId());
+        }
+
+        Director director = getDirector(movieForm.getDirectorId());
+        movieMapper.updatedEntityForm(movieForm, movie, director);
+        movieRepository.save(movie);
+    }
+
+    public Page<Movie> searchPaginated(
+            String title,
+            String genre,
+            int page,
+            int size,
+            Sort sort
+    ) {
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        String safeTitle = (title == null) ? "" : title;
+        String safeGenre = (genre == null) ? "" : genre;
+
+
+        return movieRepository.findByTitleContainingIgnoreCaseAndGenreContainingIgnoreCase(
+                safeTitle,
+                safeGenre,
+                pageable
+        );
     }
 
     public Movie updateMovie(Integer id, Movie updatedMovie) {

@@ -35,13 +35,14 @@ public class Movie {
     }
 
 
-    public Movie(Integer id, String title, String genre, String duration, Double rating, LocalDate releaseDate) {
+    public Movie(Integer id, String title, String genre, String duration, Double rating, LocalDate releaseDate, Director director) {
         this.id = id;
         this.title = title;
         this.genre = genre;
         this.duration = duration;
         this.rating = rating;
         this.releaseDate = releaseDate;
+        this.director = director;
 //        this.pageable = pageable;
     }
 
@@ -69,7 +70,15 @@ public class Movie {
         this.rating = rating;
     }
 
-//    public Pageable getPageable() {
+    public Director getDirector() {
+        return director;
+    }
+
+    public void setDirector(Director director) {
+        this.director = director;
+    }
+
+    //    public Pageable getPageable() {
 //        return pageable;
 //    }
 //
