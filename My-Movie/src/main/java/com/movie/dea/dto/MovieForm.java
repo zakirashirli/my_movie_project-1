@@ -36,6 +36,8 @@ public class MovieForm {
     @Size(min = 2, max = 3, message = "Genre must be 5-100 chars")
     private String duration;
 
+    private Integer directorId;
+
 
     public Integer getId() {
         return id;
@@ -84,4 +86,14 @@ public class MovieForm {
     public void setDuration(String duration) {
         this.duration = duration;
     }
+
+    public Integer getDirectorId() {
+        return directorId;
+    }
+
+    public void setDirectorId(Integer director) {
+        this.directorId = director;
+    }
+
+
 }
