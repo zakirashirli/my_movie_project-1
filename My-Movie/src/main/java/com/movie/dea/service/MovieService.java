@@ -96,11 +96,11 @@ public class MovieService {
         String safeGenre = (genre == null) ? "" : genre;
 
 
-        return movieRepository.findByTitleContainingIgnoreCaseAndGenreContainingIgnoreCase(
-                safeTitle,
-                safeGenre,
-                pageable
-        );
+       Page<Movie> moviePage =
+               movieRepository.findByTitleContainingIgnoreCaseAndGenreContainingIgnoreCase
+                       (safeTitle, safeGenre, pageable);
+
+       return moviePage.map(movieMapper::toDTO);
     }
 
     public Movie updateMovie(Integer id, Movie updatedMovie) {
